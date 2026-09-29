@@ -1,6 +1,7 @@
 import os
 
 SITE_DIR = "site"
+DOMAIN = "https://fathealobaly-coder.github.io"
 BASE_URL = "/free-tools"
 
 os.makedirs(SITE_DIR, exist_ok=True)
@@ -283,7 +284,7 @@ def render_layout(title, content, canonical_path="", meta_desc="مجموعة أ�
     <title>{title}</title>
     <meta name="description" content="{meta_desc}">
     <meta name="google-site-verification" content="eCDPWjSWpPPPVl-643tT_AMIPEAlQAl9GxRh_RY2j_4" />
-    <link rel="canonical" href="{BASE_URL}{canonical_path}">
+    <link rel="canonical" href="{DOMAIN}{BASE_URL}{canonical_path}">
     <style>{BASE_CSS}</style>
 </head>
 <body>
@@ -448,15 +449,17 @@ with open(f"{SITE_DIR}/about.html", "w", encoding="utf-8") as f:
 
 # 4. robots.txt
 with open(f"{SITE_DIR}/robots.txt", "w", encoding="utf-8") as f:
-    f.write("User-agent: *\nAllow: /\nSitemap: /sitemap.xml\n")
+    f.write(f"User-agent: *\nAllow: /\nSitemap: {DOMAIN}{BASE_URL}/sitemap.xml\n")
 
 # 5. sitemap.xml
 sitemap_urls = [
-    f"<url><loc>{BASE_URL}/{'/' if p == '/' else p}</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>"
-    for p in ["", "about.html", "privacy.html", "terms.html"]
+    f"<url><loc>{DOMAIN}{BASE_URL}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>",
+    f"<url><loc>{DOMAIN}{BASE_URL}/about.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>",
+    f"<url><loc>{DOMAIN}{BASE_URL}/privacy.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>",
+    f"<url><loc>{DOMAIN}{BASE_URL}/terms.html</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>"
 ]
 for t in TOOLS:
-    sitemap_urls.append(f"<url><loc>{BASE_URL}/tools/{t['id']}.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>")
+    sitemap_urls.append(f"<url><loc>{DOMAIN}{BASE_URL}/tools/{t['id']}.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>")
 
 sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -466,4 +469,4 @@ sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 with open(f"{SITE_DIR}/sitemap.xml", "w", encoding="utf-8") as f:
     f.write(sitemap_content)
 
-print(f"تم بنجاح توليد الموقع بالكامل مع {len(TOOLS)} أداة داخل مجلد site/")
+print(f"تم توليد الموقع والخريطة بنجاح كامل لعدد {len(TOOLS)} أداة.")
