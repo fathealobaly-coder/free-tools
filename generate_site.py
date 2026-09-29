@@ -1,5 +1,4 @@
 import os
-import json
 
 SITE_DIR = "site"
 BASE_URL = ""
@@ -84,8 +83,8 @@ def get_tool_interface(t_type):
         </div>
         <script>
         function run(){
-            let v = document.getElementById('inp').value;
-            let w = v.trim() ? v.trim().split(/\\s+/).length : 0;
+            var v = document.getElementById('inp').value;
+            var w = v.trim() ? v.trim().split(/\\s+/).length : 0;
             document.getElementById('words').innerText = w;
             document.getElementById('chars').innerText = v.length;
             document.getElementById('chars_no_spaces').innerText = v.replace(/\\s/g, '').length;
@@ -103,8 +102,8 @@ def get_tool_interface(t_type):
         <div class="res-box">النتيجة: <strong id="res">0</strong></div>
         <script>
         function run(){
-            let a = parseFloat(document.getElementById('p1').value) || 0;
-            let b = parseFloat(document.getElementById('p2').value) || 0;
+            var a = parseFloat(document.getElementById('p1').value) || 0;
+            var b = parseFloat(document.getElementById('p2').value) || 0;
             document.getElementById('res').innerText = ((a / 100) * b).toFixed(2);
         }
         </script>"""
@@ -117,14 +116,14 @@ def get_tool_interface(t_type):
         <div class="res-box" id="res">الرجاء اختيار تاريخ ميلادك للحساب</div>
         <script>
         function run(){
-            let d = new Date(document.getElementById('bday').value);
+            var d = new Date(document.getElementById('bday').value);
             if(isNaN(d)) return;
-            let now = new Date();
-            let years = now.getFullYear() - d.getFullYear();
-            let m = now.getMonth() - d.getMonth();
+            var now = new Date();
+            var years = now.getFullYear() - d.getFullYear();
+            var m = now.getMonth() - d.getMonth();
             if (m < 0 || (m === 0 && now.getDate() < d.getDate())) years--;
-            let diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
-            document.getElementById('res').innerHTML = `عمرك هو: <strong>${years}</strong> سنة (ما يعادل <strong>${diffDays}</strong> يوماً)`;
+            var diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+            document.getElementById('res').innerHTML = 'عمرك هو: <strong>' + years + '</strong> سنة (ما يعادل <strong>' + diffDays + '</strong> يوماً)';
         }
         </script>"""
     elif t_type == "pass_gen":
@@ -137,10 +136,10 @@ def get_tool_interface(t_type):
         <div class="res-box" style="margin-top:15px; font-family:monospace; font-size:1.2rem;" id="res">اضغط الزر أعلاه</div>
         <script>
         function run(){
-            let len = parseInt(document.getElementById('len').value) || 16;
-            let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|";
-            let pwd = "";
-            for(let i=0; i<len; i++) pwd += chars.charAt(Math.floor(Math.random() * chars.length));
+            var len = parseInt(document.getElementById('len').value) || 16;
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|";
+            var pwd = "";
+            for(var i=0; i<len; i++) pwd += chars.charAt(Math.floor(Math.random() * chars.length));
             document.getElementById('res').innerText = pwd;
         }
         run();
@@ -154,13 +153,13 @@ def get_tool_interface(t_type):
         <script>
         function format(){
             try {
-                let v = JSON.parse(document.getElementById('inp').value);
+                var v = JSON.parse(document.getElementById('inp').value);
                 document.getElementById('out').value = JSON.stringify(v, null, 4);
             } catch(e) { document.getElementById('out').value = "خطأ في بنية JSON: " + e.message; }
         }
         function minify(){
             try {
-                let v = JSON.parse(document.getElementById('inp').value);
+                var v = JSON.parse(document.getElementById('inp').value);
                 document.getElementById('out').value = JSON.stringify(v);
             } catch(e) { document.getElementById('out').value = "خطأ في بنية JSON: " + e.message; }
         }
@@ -173,15 +172,15 @@ def get_tool_interface(t_type):
         </div>
         <script>
         function run(){
-            let v = document.getElementById('inp').value.trim();
-            let img = document.getElementById('qr_img');
+            var v = document.getElementById('inp').value.trim();
+            var img = document.getElementById('qr_img');
             if(!v) { img.style.display = 'none'; return; }
             img.src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(v);
             img.style.display = 'inline-block';
         }
         </script>"""
     else:
-        return f"""
+        return """
         <textarea id="gen_inp" rows="6" placeholder="أدخل البيانات أو النصوص هنا..." oninput="run()"></textarea>
         <div class="actions" style="margin: 12px 0;">
             <button class="btn" onclick="run()">معالجة وتطبيق</button>
@@ -189,31 +188,31 @@ def get_tool_interface(t_type):
         </div>
         <div class="res-box" id="gen_out">النتائج ستظهر هنا بعد المعالجة فوراً...</div>
         <script>
-        function run(){{
-            let val = document.getElementById('gen_inp').value;
-            let t = "{t_type}";
-            let out = "";
+        function run(){
+            var val = document.getElementById('gen_inp').value;
+            var t = '""" + t_type + """';
+            var out = "";
             if(t === "case_converter") out = "كبير:\\n" + val.toUpperCase() + "\\n\\nصغير:\\n" + val.toLowerCase();
             else if(t === "remove_spaces") out = val.replace(/\\s+/g, ' ').trim();
             else if(t === "reverse_text") out = val.split('').reverse().join('');
             else if(t === "slug_gen") out = val.toLowerCase().trim().replace(/[^a-z0-9\\u0621-\\u064A]+/g, '-').replace(/^-+|-+$/g, '');
-            else if(t === "base64_tool") {{
-                try {{ out = btoa(unescape(encodeURIComponent(val))); }} catch(e){{ out = "خطأ في التشفير"; }}
-            }}
-            else if(t === "duplicate_remover") {{
-                let lines = val.split('\\n');
+            else if(t === "base64_tool") {
+                try { out = btoa(unescape(encodeURIComponent(val))); } catch(e){ out = "خطأ في التشفير"; }
+            }
+            else if(t === "duplicate_remover") {
+                var lines = val.split('\\n');
                 out = Array.from(new Set(lines)).join('\\n');
-            }}
+            }
             else if(t === "url_encode") out = encodeURIComponent(val);
-            else if(t === "temp_conv") {{
-                let c = parseFloat(val) || 0;
-                out = `${{c}} مئوي = ${(c * 9/5 + 32).toFixed(2)} فهرنهايت = ${(c + 273.15).toFixed(2)} كلفن`;
-            }}
-            else {{
+            else if(t === "temp_conv") {
+                var c = parseFloat(val) || 0;
+                out = c + " مئوي = " + (c * 9/5 + 32).toFixed(2) + " فهرنهايت = " + (c + 273.15).toFixed(2) + " كلفن";
+            }
+            else {
                 out = "تمت المعالجة بنجاح:\\n" + val;
-            }}
+            }
             document.getElementById('gen_out').innerText = out;
-        }}
+        }
         </script>"""
 
 BASE_CSS = """
@@ -316,6 +315,7 @@ def render_layout(title, content, canonical_path="", meta_desc="مجموعة أ�
 </body>
 </html>"""
 
+# 1. الصفحة الرئيسية
 cards_html = ""
 for t in TOOLS:
     cards_html += f"""
@@ -379,6 +379,7 @@ function filterTools() {{
 with open(f"{SITE_DIR}/index.html", "w", encoding="utf-8") as f:
     f.write(render_layout("أدوات مجانية أونلاين | +50 أداة مفيدة وشاملة", index_body, "/", "منصة أدوات مجانية شاملة للحسابات وتحويل الوحدات ومعالجة النصوص وتطوير المواقع."))
 
+# 2. صفحات الأدوات الفردية
 for t in TOOLS:
     tool_content = f"""
     <div style="margin-bottom: 20px;">
@@ -407,6 +408,7 @@ for t in TOOLS:
     with open(f"{SITE_DIR}/tools/{t['id']}.html", "w", encoding="utf-8") as f:
         f.write(render_layout(f"{t['name']} - أدوات مجانية", tool_content, f"/tools/{t['id']}.html", t['desc']))
 
+# 3. الصفحات القانونية
 privacy_html = """
 <div class="static-content">
     <h1>سياسة الخصوصية</h1>
@@ -443,9 +445,11 @@ about_html = """
 with open(f"{SITE_DIR}/about.html", "w", encoding="utf-8") as f:
     f.write(render_layout("من نحن", about_html, "/about.html"))
 
+# 4. robots.txt
 with open(f"{SITE_DIR}/robots.txt", "w", encoding="utf-8") as f:
     f.write("User-agent: *\nAllow: /\nSitemap: /sitemap.xml\n")
 
+# 5. sitemap.xml
 sitemap_urls = [
     f"<url><loc>/{'/' if p == '/' else p}</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>"
     for p in ["", "about.html", "privacy.html", "terms.html"]
