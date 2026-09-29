@@ -1,7 +1,7 @@
 import os
 
 SITE_DIR = "site"
-BASE_URL = ""
+BASE_URL = "/free-tools"
 
 os.makedirs(SITE_DIR, exist_ok=True)
 os.makedirs(f"{SITE_DIR}/tools", exist_ok=True)
@@ -319,7 +319,7 @@ def render_layout(title, content, canonical_path="", meta_desc="مجموعة أ�
 cards_html = ""
 for t in TOOLS:
     cards_html += f"""
-    <a href="tools/{t['id']}.html" class="card" data-cat="{t['cat']}" data-title="{t['name']}">
+    <a href="{BASE_URL}/tools/{t['id']}.html" class="card" data-cat="{t['cat']}" data-title="{t['name']}">
         <div>
             <span class="card-tag">{t['cat']}</span>
             <h3 style="margin-top: 10px;">{t['name']}</h3>
@@ -451,11 +451,11 @@ with open(f"{SITE_DIR}/robots.txt", "w", encoding="utf-8") as f:
 
 # 5. sitemap.xml
 sitemap_urls = [
-    f"<url><loc>/{'/' if p == '/' else p}</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>"
+    f"<url><loc>{BASE_URL}/{'/' if p == '/' else p}</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>"
     for p in ["", "about.html", "privacy.html", "terms.html"]
 ]
 for t in TOOLS:
-    sitemap_urls.append(f"<url><loc>/tools/{t['id']}.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>")
+    sitemap_urls.append(f"<url><loc>{BASE_URL}/tools/{t['id']}.html</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>")
 
 sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
